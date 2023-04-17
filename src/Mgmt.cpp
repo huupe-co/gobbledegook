@@ -183,7 +183,7 @@ bool Mgmt::setAdvertising(uint8_t newState) {
 
 // Start advertising with custom data
 // Advertisement packet will contain: flags, shortName, uuid
-bool Mgmt::addAdvertising(std::string shortName, const uint8_t *uuid) {
+bool Mgmt::addAdvertising(std::string shortName, const uint16_t *uuid) {
     Logger::debug(SSTR << "addAdvertising()");
     constexpr size_t ADVERTISING_SHORTNAME_MAX_LEN = 8;
     constexpr size_t ADVERTISING_UUID_LEN = 2;
