@@ -527,6 +527,20 @@ Server::Server(
             Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
         })
         .gattCharacteristicEnd()
+
+        // settings
+        .gattCharacteristicBegin("wifi", "b382", {"read", "write"})
+        .onReadValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+            const char *pTextString = self.getDataPointer<const char *>("Huupe/wifi", "");
+            self.methodReturnValue(pInvocation, pTextString, true);
+        })
+        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
+            self.setDataPointer("Huupe/wifi", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+            self.callOnUpdatedValue(pConnection, pUserData);
+            self.methodReturnVariant(pInvocation, NULL);
+        })
+        .gattCharacteristicEnd()
         // // Characteristic: String value (custom: 00000002-1E3C-FAD4-74E2-97A033F1BFAA)
         // .gattCharacteristicBegin("game", "b373", {"read", "write", "notify"})
 
