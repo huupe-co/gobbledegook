@@ -527,6 +527,24 @@ Server::Server(
             Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
         })
         .gattCharacteristicEnd()
+
+        // settings: WiFi
+        .gattCharacteristicBegin("settings/wifi/list", "b392", {"read"})
+        .onReadValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/settings/wifi/list", std::vector<guint8>());
+            self.methodReturnValue(pInvocation, bytes, true);
+        })
+        .gattCharacteristicEnd()
+
+        // settings: WiFi
+        .gattCharacteristicBegin("settings/wifi/set", "b393", {"write"})
+        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
+            self.setDataPointer("Huupe/settings/wifi/set", Utils::bytesVectorFromGVariantByteArray(pAyBuffer));
+            self.callOnUpdatedValue(pConnection, pUserData);
+            self.methodReturnVariant(pInvocation, NULL);
+        })
+        .gattCharacteristicEnd()
         // // Characteristic: String value (custom: 00000002-1E3C-FAD4-74E2-97A033F1BFAA)
         // .gattCharacteristicBegin("game", "b373", {"read", "write", "notify"})
 
