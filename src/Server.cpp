@@ -529,7 +529,7 @@ Server::Server(
         .gattCharacteristicEnd()
 
         // settings: WiFi
-        .gattCharacteristicBegin("settings/wifi/list", "b392", {"read"})
+        .gattCharacteristicBegin("settings/wifi/list", "b392", {"read", "notify"})
         .onReadValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
             const std::vector<guint8> bytes = self.getDataValue("Huupe/settings/wifi/list", std::vector<guint8>());
             self.methodReturnValue(pInvocation, bytes, true);
@@ -537,7 +537,7 @@ Server::Server(
         .gattCharacteristicEnd()
 
         // settings: WiFi
-        .gattCharacteristicBegin("settings/wifi/set", "b393", {"write"})
+        .gattCharacteristicBegin("settings/wifi/set", "b393", {"write", "read", "notify"})
         .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
             GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
             self.setDataPointer("Huupe/settings/wifi/set", Utils::bytesVectorFromGVariantByteArray(pAyBuffer));
