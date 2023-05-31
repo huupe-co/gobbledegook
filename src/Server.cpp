@@ -397,73 +397,73 @@ Server::Server(
         // will notify that the value has been updated and provide the new text from that point forward.
         .gattServiceBegin("Huupe", "b370")
 
-        // runGame
-        .gattCharacteristicBegin("runGame", "b371", {"write"})
-        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
-            // Update the text string value
-            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
-            self.setDataPointer("Huupe/runGame", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // // runGame
+        // .gattCharacteristicBegin("runGame", "b371", {"write"})
+        // .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+        //     // Update the text string value
+        //     GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
+        //     self.setDataPointer("Huupe/runGame", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
 
-            // Since all of these methods (onReadValue, onWriteValue, onUpdateValue) are all part of the same
-            // Characteristic interface (which just so happens to be the same interface passed into our self
-            // parameter) we can that parameter to call our own onUpdatedValue method
-            self.callOnUpdatedValue(pConnection, pUserData);
+        //     // Since all of these methods (onReadValue, onWriteValue, onUpdateValue) are all part of the same
+        //     // Characteristic interface (which just so happens to be the same interface passed into our self
+        //     // parameter) we can that parameter to call our own onUpdatedValue method
+        //     self.callOnUpdatedValue(pConnection, pUserData);
 
-            // Note: Even though the WriteValue method returns void, it's important to return like this, so that a
-            // dbus "method_return" is sent, otherwise the client gets an error (ATT error code 0x0e"unlikely").
-            // Only "write-without-response" works without this
-            self.methodReturnVariant(pInvocation, NULL);
-            Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
-        })
-        .gattCharacteristicEnd()
+        //     // Note: Even though the WriteValue method returns void, it's important to return like this, so that a
+        //     // dbus "method_return" is sent, otherwise the client gets an error (ATT error code 0x0e"unlikely").
+        //     // Only "write-without-response" works without this
+        //     self.methodReturnVariant(pInvocation, NULL);
+        //     Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // })
+        // .gattCharacteristicEnd()
 
-        // runTraining
-        .gattCharacteristicBegin("runTraining", "b378", {"write"})
-        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
-            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
-            self.setDataPointer("Huupe/runTraining", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // // runTraining
+        // .gattCharacteristicBegin("runTraining", "b378", {"write"})
+        // .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+        //     GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
+        //     self.setDataPointer("Huupe/runTraining", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
 
-            self.callOnUpdatedValue(pConnection, pUserData);
-            self.methodReturnVariant(pInvocation, NULL);
-            Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
-        })
-        .gattCharacteristicEnd()
+        //     self.callOnUpdatedValue(pConnection, pUserData);
+        //     self.methodReturnVariant(pInvocation, NULL);
+        //     Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // })
+        // .gattCharacteristicEnd()
 
-        // finishGame
-        .gattCharacteristicBegin("finishGame", "b375", {"write"})
-        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
-            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
-            self.setDataPointer("Huupe/finishGame", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // // finishGame
+        // .gattCharacteristicBegin("finishGame", "b375", {"write"})
+        // .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+        //     GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
+        //     self.setDataPointer("Huupe/finishGame", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
 
-            self.callOnUpdatedValue(pConnection, pUserData);
-            self.methodReturnVariant(pInvocation, NULL);
-            Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
-        })
-        .gattCharacteristicEnd()
+        //     self.callOnUpdatedValue(pConnection, pUserData);
+        //     self.methodReturnVariant(pInvocation, NULL);
+        //     Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // })
+        // .gattCharacteristicEnd()
 
-        // navigateHome
-        .gattCharacteristicBegin("navigateHome", "b377", {"write"})
-        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
-            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
-            self.setDataPointer("Huupe/navigateHome", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // // navigateHome
+        // .gattCharacteristicBegin("navigateHome", "b377", {"write"})
+        // .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+        //     GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
+        //     self.setDataPointer("Huupe/navigateHome", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
 
-            self.callOnUpdatedValue(pConnection, pUserData);
-            self.methodReturnVariant(pInvocation, NULL);
-            Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
-        })
-        .gattCharacteristicEnd()
+        //     self.callOnUpdatedValue(pConnection, pUserData);
+        //     self.methodReturnVariant(pInvocation, NULL);
+        //     Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // })
+        // .gattCharacteristicEnd()
 
-        // playPause
-        .gattCharacteristicBegin("playPause", "b374", {"write"})
-        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
-            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
-            self.setDataPointer("Huupe/playPause", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // // playPause
+        // .gattCharacteristicBegin("playPause", "b374", {"write"})
+        // .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+        //     GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
+        //     self.setDataPointer("Huupe/playPause", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
 
-            self.callOnUpdatedValue(pConnection, pUserData);
-            self.methodReturnVariant(pInvocation, NULL);
-            Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
-        })
-        .gattCharacteristicEnd()
+        //     self.callOnUpdatedValue(pConnection, pUserData);
+        //     self.methodReturnVariant(pInvocation, NULL);
+        //     Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        // })
+        // .gattCharacteristicEnd()
 
         // playVideo
         .gattCharacteristicBegin("playVideo", "b376", {"write"})
@@ -477,20 +477,50 @@ Server::Server(
         })
         .gattCharacteristicEnd()
 
-        // game
-        .gattCharacteristicBegin("game", "b373", {"notify"})
-        // Here we use the onUpdatedValue to set a callback that isn't exposed to BlueZ, but rather allows us to manage
-        // updates to our value. These updates may have come from our own server or some other source.
-        //
-        // We can handle updates in any way we wish, but the most common use is to send a change notification.
+        // // game
+        // .gattCharacteristicBegin("game", "b373", {"notify"})
+        // // Here we use the onUpdatedValue to set a callback that isn't exposed to BlueZ, but rather allows us to
+        // manage
+        // // updates to our value. These updates may have come from our own server or some other source.
+        // //
+        // // We can handle updates in any way we wish, but the most common use is to send a change notification.
+        // .onUpdatedValue(CHARACTERISTIC_UPDATED_VALUE_CALLBACK_LAMBDA {
+        //     const char *pTextString = self.getDataPointer<const char *>("Huupe/game", "");
+        //     self.sendChangeNotificationValue(pConnection, pTextString);
+        //     return true;
+        // })
+        // .gattCharacteristicEnd()
+
+        // State
+        .gattCharacteristicBegin("state/get", "b380", {"read", "notify"})
+        .onReadValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/state/get", std::vector<guint8>());
+            self.methodReturnValue(pInvocation, bytes, true);
+        })
         .onUpdatedValue(CHARACTERISTIC_UPDATED_VALUE_CALLBACK_LAMBDA {
-            const char *pTextString = self.getDataPointer<const char *>("Huupe/game", "");
-            self.sendChangeNotificationValue(pConnection, pTextString);
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/state/get", std::vector<guint8>());
+            self.sendChangeNotificationValue(pConnection, bytes);
             return true;
         })
         .gattCharacteristicEnd()
 
-        .gattCharacteristicBegin("streamState", "b380", {"read", "notify"})
+        // StateCmd
+        .gattCharacteristicBegin("state/set", "b381", {"write", "notify"})
+        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
+            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
+            self.setDataPointer("Huupe/state/set", Utils::bytesVectorFromGVariantByteArray(pAyBuffer));
+            self.callOnUpdatedValue(pConnection, pUserData);
+            self.methodReturnVariant(pInvocation, NULL);
+        })
+        .onUpdatedValue(CHARACTERISTIC_UPDATED_VALUE_CALLBACK_LAMBDA {
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/state/set", std::vector<guint8>());
+            self.sendChangeNotificationValue(pConnection, bytes);
+            return true;
+        })
+        .gattCharacteristicEnd()
+
+        // Stream
+        .gattCharacteristicBegin("streamState", "b382", {"read", "notify"})
         .onReadValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
             const char *pTextString = self.getDataPointer<const char *>("Huupe/streamState", "");
             self.methodReturnValue(pInvocation, pTextString, true);
@@ -503,7 +533,7 @@ Server::Server(
         })
         .gattCharacteristicEnd()
 
-        .gattCharacteristicBegin("streamCmd", "b381", {"write"})
+        .gattCharacteristicBegin("streamCmd", "b383", {"write"})
         .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
             GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
             self.setDataPointer("Huupe/streamCmd", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
@@ -543,13 +573,13 @@ Server::Server(
         .gattCharacteristicEnd()
 
         // settings: WiFiNetwork
-        .gattCharacteristicBegin("settings/wifi/list", "b392", {"read", "notify"})
+        .gattCharacteristicBegin("settings/wifi/get", "b392", {"read", "notify"})
         .onReadValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
-            const std::vector<guint8> bytes = self.getDataValue("Huupe/settings/wifi/list", std::vector<guint8>());
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/settings/wifi/get", std::vector<guint8>());
             self.methodReturnValue(pInvocation, bytes, true);
         })
         .onUpdatedValue(CHARACTERISTIC_UPDATED_VALUE_CALLBACK_LAMBDA {
-            const std::vector<guint8> bytes = self.getDataValue("Huupe/settings/wifi/list", std::vector<guint8>());
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/settings/wifi/get", std::vector<guint8>());
             self.sendChangeNotificationValue(pConnection, bytes);
             return true;
         })
