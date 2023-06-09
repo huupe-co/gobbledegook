@@ -267,18 +267,6 @@ Server::Server(
 
         .gattServiceBegin("Huupe", "b370")
 
-        // playVideo
-        .gattCharacteristicBegin("playVideo", "b376", {"write"})
-        .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
-            GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
-            self.setDataPointer("Huupe/playVideo", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
-
-            self.callOnUpdatedValue(pConnection, pUserData);
-            self.methodReturnVariant(pInvocation, NULL);
-            Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
-        })
-        .gattCharacteristicEnd()
-
         // State
         .gattCharacteristicBegin("state/get", "b380", {"read", "notify"})
         .onReadValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
@@ -307,28 +295,31 @@ Server::Server(
         })
         .gattCharacteristicEnd()
 
-        // Stream
-        .gattCharacteristicBegin("streamState", "b382", {"read", "notify"})
+        // StreamState
+        .gattCharacteristicBegin("stream/get", "b382", {"read", "notify"})
         .onReadValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
-            const char *pTextString = self.getDataPointer<const char *>("Huupe/streamState", "");
-            self.methodReturnValue(pInvocation, pTextString, true);
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/stream/get", std::vector<guint8>());
+            self.methodReturnValue(pInvocation, bytes, true);
         })
-        // We can handle updates in any way we wish, but the most common use is to send a change notification.
         .onUpdatedValue(CHARACTERISTIC_UPDATED_VALUE_CALLBACK_LAMBDA {
-            const char *pTextString = self.getDataPointer<const char *>("Huupe/streamState", "");
-            self.sendChangeNotificationValue(pConnection, pTextString);
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/stream/get", std::vector<guint8>());
+            self.sendChangeNotificationValue(pConnection, bytes);
             return true;
         })
         .gattCharacteristicEnd()
 
-        .gattCharacteristicBegin("streamCmd", "b383", {"write"})
+        // StreamCmd
+        .gattCharacteristicBegin("stream/set", "b383", {"write", "notify"})
         .onWriteValue(CHARACTERISTIC_METHOD_CALLBACK_LAMBDA {
             GVariant *pAyBuffer = g_variant_get_child_value(pParameters, 0);
-            self.setDataPointer("Huupe/streamCmd", Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
-
+            self.setDataPointer("Huupe/stream/set", Utils::bytesVectorFromGVariantByteArray(pAyBuffer));
             self.callOnUpdatedValue(pConnection, pUserData);
             self.methodReturnVariant(pInvocation, NULL);
-            Logger::always(Utils::stringFromGVariantByteArray(pAyBuffer).c_str());
+        })
+        .onUpdatedValue(CHARACTERISTIC_UPDATED_VALUE_CALLBACK_LAMBDA {
+            const std::vector<guint8> bytes = self.getDataValue("Huupe/stream/set", std::vector<guint8>());
+            self.sendChangeNotificationValue(pConnection, bytes);
+            return true;
         })
         .gattCharacteristicEnd()
 
