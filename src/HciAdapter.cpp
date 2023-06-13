@@ -51,6 +51,7 @@
 #include "Logger.h"
 #include "Mgmt.h"
 #include "Utils.h"
+#include "Server.h"
 
 namespace ggk {
 
@@ -317,8 +318,10 @@ void HciAdapter::runEventThread() {
             activeConnections += 1;
             Logger::debug(SSTR << "  > Connection count incremented to " << activeConnections);
             Mgmt mgmt;
-            // mgmt.setAdvertising(1);
-            mgmt.addAdvertising("", nullptr);
+            std::string advertisingShortName = Mgmt::truncateShortName(TheServer->getAdvertisingShortName());
+            const uint16_t id = TheServer->getAdvertisingServiceId();
+
+            mgmt.addAdvertising(advertisingShortName, &id);
             break;
         }
         // Command status event
@@ -330,8 +333,6 @@ void HciAdapter::runEventThread() {
             } else {
                 Logger::debug(SSTR << "  > Connection count already at zero, ignoring non-connected disconnect event");
             }
-            // Mgmt mgmt;
-            // mgmt.setAdvertising(1);
             break;
         }
         // Unsupported

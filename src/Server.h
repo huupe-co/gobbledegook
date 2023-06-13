@@ -150,6 +150,10 @@ struct Server {
         return std::string("com.") + getServiceName();
     }
 
+    const uint16_t getAdvertisingServiceId() {
+        return advertisingServiceId;
+    }
+
     //
     // Initialization
     //
@@ -279,6 +283,9 @@ private:
     // This is used to build the path for our Bluetooth services (and we'll go ahead and use it as the owned name as
     // well for consistency.)
     std::string serviceName;
+
+
+    const uint16_t advertisingServiceId = 0xb370;
 };
 
 // Our one and only server. It's a global.
