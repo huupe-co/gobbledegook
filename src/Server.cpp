@@ -247,7 +247,7 @@ Server::Server(
 
     // Adapter configuration flags - set these flags based on how you want the adapter configured
     enableBREDR = false;
-    enableSecureConnection = false;
+    enableSecureConnection = true;
     enableConnectable = true;
     enableDiscoverable = true;
     enableAdvertising = true;
