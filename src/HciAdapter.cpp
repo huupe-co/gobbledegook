@@ -317,11 +317,15 @@ void HciAdapter::runEventThread() {
             DeviceConnectedEvent event(responsePacket);
             activeConnections += 1;
             Logger::debug(SSTR << "  > Connection count incremented to " << activeConnections);
-            Mgmt mgmt;
+            
             std::string advertisingShortName = Mgmt::truncateShortName(TheServer->getAdvertisingShortName());
             const uint16_t id = TheServer->getAdvertisingServiceId();
+            bool allowMultiConnection = TheServer->getAllowMultiConnection();
 
-            mgmt.addAdvertising(advertisingShortName, &id);
+            if (allowMultiConnection) {
+                Mgmt mgmt;
+                mgmt.addAdvertising(advertisingShortName, &id);
+            }
             break;
         }
         // Command status event

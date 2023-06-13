@@ -154,6 +154,10 @@ struct Server {
         return advertisingServiceId;
     }
 
+    const uint16_t getAllowMultiConnection() {
+        return allowMultiConnection;
+    }
+
     //
     // Initialization
     //
@@ -192,6 +196,7 @@ struct Server {
         const std::string &serviceName,
         const std::string &advertisingName,
         const std::string &advertisingShortName,
+        const bool allowMultiConnection,
         GGKServerDataGetter getter,
         GGKServerDataSetter setter
     );
@@ -284,8 +289,9 @@ private:
     // well for consistency.)
     std::string serviceName;
 
+    uint16_t advertisingServiceId = 0xb370;
 
-    const uint16_t advertisingServiceId = 0xb370;
+    bool allowMultiConnection = false;
 };
 
 // Our one and only server. It's a global.
