@@ -150,6 +150,14 @@ struct Server {
         return std::string("com.") + getServiceName();
     }
 
+    const uint16_t getAdvertisingServiceId() {
+        return advertisingServiceId;
+    }
+
+    const uint16_t getEnableMultipleConnections() {
+        return enableMultipleConnections;
+    }
+
     //
     // Initialization
     //
@@ -188,6 +196,7 @@ struct Server {
         const std::string &serviceName,
         const std::string &advertisingName,
         const std::string &advertisingShortName,
+        const bool enableMultipleConnections,
         GGKServerDataGetter getter,
         GGKServerDataSetter setter
     );
@@ -279,6 +288,10 @@ private:
     // This is used to build the path for our Bluetooth services (and we'll go ahead and use it as the owned name as
     // well for consistency.)
     std::string serviceName;
+
+    uint16_t advertisingServiceId = 0xb370;
+
+    bool enableMultipleConnections = false;
 };
 
 // Our one and only server. It's a global.
