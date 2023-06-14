@@ -451,7 +451,7 @@ int ggkStart(
     const char *pServiceName,
     const char *pAdvertisingName,
     const char *pAdvertisingShortName,
-    bool allowMultiConnection,
+    bool enableMultipleConnections,
     GGKServerDataGetter getter,
     GGKServerDataSetter setter,
     int maxAsyncInitTimeoutMS
@@ -489,7 +489,7 @@ int ggkStart(
             pServiceName,
             pAdvertisingName,
             pAdvertisingShortName,
-            allowMultiConnection,
+            enableMultipleConnections,
             getter,
             setter
         );
