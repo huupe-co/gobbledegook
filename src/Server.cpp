@@ -232,6 +232,7 @@ Server::Server(
     const std::string &serviceName,
     const std::string &advertisingName,
     const std::string &advertisingShortName,
+    const bool enableMultipleConnections,
     GGKServerDataGetter getter,
     GGKServerDataSetter setter
 ) {
@@ -240,6 +241,7 @@ Server::Server(
     std::transform(this->serviceName.begin(), this->serviceName.end(), this->serviceName.begin(), ::tolower);
     this->advertisingName = advertisingName;
     this->advertisingShortName = advertisingShortName;
+    this->enableMultipleConnections = enableMultipleConnections;
 
     // Register getter & setter for server data
     dataGetter = getter;
@@ -247,7 +249,7 @@ Server::Server(
 
     // Adapter configuration flags - set these flags based on how you want the adapter configured
     enableBREDR = false;
-    enableSecureConnection = false;
+    enableSecureConnection = true;
     enableConnectable = true;
     enableDiscoverable = true;
     enableAdvertising = true;

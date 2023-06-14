@@ -672,7 +672,7 @@ void configureAdapter() {
     // Get our properly truncated advertising names
     std::string advertisingName = Mgmt::truncateName(TheServer->getAdvertisingName());
     std::string advertisingShortName = Mgmt::truncateShortName(TheServer->getAdvertisingShortName());
-
+    const uint16_t id = TheServer->getAdvertisingServiceId();
     // Find out what our current settings are
     HciAdapter::ControllerInformation info = HciAdapter::getInstance().getControllerInformation();
 
@@ -766,7 +766,6 @@ void configureAdapter() {
                 //     return;
                 // }
                 Logger::debug(SSTR << "Change the Advertising state...");
-                const uint16_t id = 0xb370;
                 if (!mgmt.addAdvertising(advertisingShortName.c_str(), &id)) {
                     setRetry();
                     return;

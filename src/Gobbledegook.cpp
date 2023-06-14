@@ -451,6 +451,7 @@ int ggkStart(
     const char *pServiceName,
     const char *pAdvertisingName,
     const char *pAdvertisingShortName,
+    bool enableMultipleConnections,
     GGKServerDataGetter getter,
     GGKServerDataSetter setter,
     int maxAsyncInitTimeoutMS
@@ -484,7 +485,14 @@ int ggkStart(
         Logger::info(SSTR << "Starting GGK server '" << pAdvertisingName << "'");
 
         // Allocate our server
-        TheServer = std::make_shared<Server>(pServiceName, pAdvertisingName, pAdvertisingShortName, getter, setter);
+        TheServer = std::make_shared<Server>(
+            pServiceName,
+            pAdvertisingName,
+            pAdvertisingShortName,
+            enableMultipleConnections,
+            getter,
+            setter
+        );
 
         // Start our server thread
         try {

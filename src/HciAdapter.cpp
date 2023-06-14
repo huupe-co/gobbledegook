@@ -50,6 +50,7 @@
 #include "HciSocket.h"
 #include "Logger.h"
 #include "Mgmt.h"
+#include "Server.h"
 #include "Utils.h"
 
 namespace ggk {
@@ -125,8 +126,9 @@ const char *const HciAdapter::kCommandCodeNames[kMaxCommandCode + 1] = {
     "Get Advertising Size Information Command",          // 0x0040
     "Start Limited Discovery Command",                   // 0x0041
     "Read Extended Controller Information Command",      // 0x0042
-    // NOTE: The documentation at https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/mgmt-api.txt) states that
-    // the command code for "Set Appearance Command" is 0x0042. It also says this about the previous command in the list
+    // NOTE: The documentation at https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/mgmt-api.txt) states
+    // that the command code for "Set Appearance Command" is 0x0042. It also says this about the previous command in
+    // the list
     // ("Read Extended Controller Information Command".) This is likely an error, so I'm following the order of the
     // commands as they appear in the documentation. This makes "Set Appearance Code" have a command code of 0x0043.
     "Set Appearance Command" // 0x0043
@@ -206,8 +208,8 @@ void runEventThread() {
 //
 // This mehtod should not be called directly. Rather, it runs continuously on a thread until the server shuts down
 //
-// It isn't necessary to disconnect manually; the HCI socket will get disocnnected automatically at before this method
-// returns
+// It isn't necessary to disconnect manually; the HCI socket will get disocnnected automatically at before this
+// method returns
 void HciAdapter::runEventThread() {
     Logger::trace("Entering the HciAdapter event thread");
 
@@ -316,6 +318,16 @@ void HciAdapter::runEventThread() {
             DeviceConnectedEvent event(responsePacket);
             activeConnections += 1;
             Logger::debug(SSTR << "  > Connection count incremented to " << activeConnections);
+
+            std::string advertisingShortName = Mgmt::truncateShortName(TheServer->getAdvertisingShortName());
+            const uint16_t id = TheServer->getAdvertisingServiceId();
+
+            bool enableMultipleConnections = TheServer->getEnableMultipleConnections();
+            Logger::debug(SSTR << "  > enableMultipleConnections " << enableMultipleConnections);
+            if (enableMultipleConnections) {
+                Mgmt mgmt;
+                mgmt.addAdvertising(advertisingShortName, &id);
+            }
             break;
         }
         // Command status event
@@ -380,7 +392,8 @@ void HciAdapter::sync(uint16_t controllerIndex) {
 //
 // If the thread is already running, this method will fail
 //
-// Note that it shouldn't be necessary to connect manually; any action requiring a connection will automatically connect
+// Note that it shouldn't be necessary to connect manually; any action requiring a connection will automatically
+// connect
 //
 // Returns true if the HCI socket is connected (either via a new connection or an existing one), otherwise false
 bool HciAdapter::start() {
@@ -472,7 +485,8 @@ bool HciAdapter::sendCommand(HciHeader &request) {
     return fut.get();
 }
 
-// Uses a std::condition_variable to wait for a response event for the given `commandCode` or `timeoutMS` milliseconds.
+// Uses a std::condition_variable to wait for a response event for the given `commandCode` or `timeoutMS`
+// milliseconds.
 //
 // Returns true if the response event was received for `commandCode` or false if the timeout expired.
 //
