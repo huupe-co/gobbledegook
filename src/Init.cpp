@@ -93,6 +93,7 @@ static std::string bluezGattManagerInterfaceName = "";
 
 extern void setServerRunState(enum GGKServerRunState newState);
 extern void setServerHealth(enum GGKServerHealth newHealth);
+extern int runThreadPriority;
 
 //
 // Forward declarations
@@ -1163,6 +1164,16 @@ void initializationStateProcessor() {
 //
 // This method should not be called directly, instead, direct your attention over to `ggkStart()`
 void runServerThread() {
+    if (runThreadPriority > 0) {
+        int policy = SCHED_RR;
+        struct sched_param param;
+        param.sched_priority = runThreadPriority;
+        if (pthread_setschedparam(pthread_self(), policy, &param) < 0) {
+            Logger::error(SSTR << "Unable to set thread priority");
+        } else {
+            Logger::info(SSTR << "Set ggk thread priority " << runThreadPriority);
+        }
+    }
     // Set the initialization state
     setServerRunState(EInitializing);
 

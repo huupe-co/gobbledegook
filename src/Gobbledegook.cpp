@@ -87,6 +87,9 @@ void setServerHealth(GGKServerHealth newHealth) {
     );
     serverHealth = newHealth;
 }
+
+int runThreadPriority = -1;
+
 }; // namespace ggk
 
 using namespace ggk;
@@ -538,4 +541,8 @@ int ggkStart(
         Logger::error(SSTR << "Unknown exception during ggkStart()");
         return 0;
     }
+}
+
+void ggkSetThreadPriority(int priority) {
+    runThreadPriority = priority;
 }

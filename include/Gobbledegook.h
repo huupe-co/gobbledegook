@@ -305,6 +305,8 @@ enum GGKServerHealth ggkGetServerHealth();
 // Convert a `GGKServerHealth` into a human-readable string
 const char *ggkGetServerHealthString(enum GGKServerHealth state);
 
+void ggkSetThreadPriority(int priority);
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus
