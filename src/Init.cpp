@@ -1169,9 +1169,9 @@ void runServerThread() {
         struct sched_param param;
         param.sched_priority = runThreadPriority;
         if (pthread_setschedparam(pthread_self(), policy, &param) < 0) {
-            Logger::error(SSTR << "Unable to set thread priority");
+            Logger::error(SSTR << "Unable to set thread priority.");
         } else {
-            Logger::info(SSTR << "Set ggk thread priority " << runThreadPriority);
+            Logger::info(SSTR << "Set ggk thread priority: " << runThreadPriority << ".");
         }
     }
     // Set the initialization state
