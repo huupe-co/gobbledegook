@@ -694,6 +694,11 @@ void configureAdapter() {
     if (!pwFlag || !leFlag || !brFlag || !scFlag || !bnFlag || !cnFlag || !diFlag || !adFlag || !anFlag) {
         // We need it off to start with
         if (pwFlag) {
+
+            // Remove a pre existing advertising instance in case app was restarted or crashed and couldn't cleanup.
+            Logger::debug("Removing possible advertising instance");
+            mgmt.removeAdvertising();
+
             Logger::debug("Powering off");
             if (!mgmt.setPowered(false)) {
                 setRetry();

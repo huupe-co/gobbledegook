@@ -181,6 +181,28 @@ bool Mgmt::setAdvertising(uint8_t newState) {
     return setState(Mgmt::ESetAdvertisingCommand, controllerIndex, newState);
 }
 
+bool Mgmt::removeAdvertising() {
+    Logger::debug(SSTR << "removeAdvertising()");
+
+    struct SRequest : HciAdapter::HciHeader {
+        uint8_t instance;
+    } __attribute__((packed));
+
+    SRequest request;
+    request.code = Mgmt::ERemoveAdvertisingCommand;
+    request.controllerId = controllerIndex;
+    request.dataSize = 1;
+    request.instance = 1u;
+
+    if (!HciAdapter::getInstance().sendCommand(request)) {
+        Logger::warn(SSTR << "  + Failed to remove advertising");
+        return false;
+    }
+
+    return true;
+
+}
+
 // Start advertising with custom data
 // Advertisement packet will contain: flags, shortName, uuid
 bool Mgmt::addAdvertising(std::string shortName, const uint16_t *uuid) {
