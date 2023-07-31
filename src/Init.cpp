@@ -1116,14 +1116,6 @@ void initializationStateProcessor() {
         return;
     }
 
-    //
-    // Find the adapter interface
-    //
-    if (!bAdapterConfigured) {
-        Logger::debug(SSTR << "Configuring BlueZ adapter '" << bluezGattManagerInterfaceName << "'");
-        configureAdapter();
-        return;
-    }
 
     //
     // Register our object with D-bus
