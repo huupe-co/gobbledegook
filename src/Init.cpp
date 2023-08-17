@@ -1116,6 +1116,15 @@ void initializationStateProcessor() {
         return;
     }
 
+    bool isExternalAdvertising = TheServer->getExternalAdvertising();
+    //
+    // Find the adapter interface
+    //
+    if (!bAdapterConfigured && !isExternalAdvertising) {
+        Logger::debug(SSTR << "Configuring BlueZ adapter '" << bluezGattManagerInterfaceName << "'");
+        configureAdapter();
+        return;
+    }
 
     //
     // Register our object with D-bus

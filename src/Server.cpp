@@ -233,6 +233,7 @@ Server::Server(
     const std::string &advertisingName,
     const std::string &advertisingShortName,
     const bool enableMultipleConnections,
+    const bool externalAdvertising,
     GGKServerDataGetter getter,
     GGKServerDataSetter setter
 ) {
@@ -242,6 +243,7 @@ Server::Server(
     this->advertisingName = advertisingName;
     this->advertisingShortName = advertisingShortName;
     this->enableMultipleConnections = enableMultipleConnections;
+    this->externalAdvertising = externalAdvertising;
 
     // Register getter & setter for server data
     dataGetter = getter;
