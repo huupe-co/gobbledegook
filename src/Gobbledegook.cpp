@@ -107,24 +107,31 @@ using namespace ggk;
 void ggkLogRegisterDebug(GGKLogReceiver receiver) {
     Logger::registerDebugReceiver(receiver);
 }
+
 void ggkLogRegisterInfo(GGKLogReceiver receiver) {
     Logger::registerInfoReceiver(receiver);
 }
+
 void ggkLogRegisterStatus(GGKLogReceiver receiver) {
     Logger::registerStatusReceiver(receiver);
 }
+
 void ggkLogRegisterWarn(GGKLogReceiver receiver) {
     Logger::registerWarnReceiver(receiver);
 }
+
 void ggkLogRegisterError(GGKLogReceiver receiver) {
     Logger::registerErrorReceiver(receiver);
 }
+
 void ggkLogRegisterFatal(GGKLogReceiver receiver) {
     Logger::registerFatalReceiver(receiver);
 }
+
 void ggkLogRegisterTrace(GGKLogReceiver receiver) {
     Logger::registerTraceReceiver(receiver);
 }
+
 void ggkLogRegisterAlways(GGKLogReceiver receiver) {
     Logger::registerAlwaysReceiver(receiver);
 }
@@ -455,6 +462,7 @@ int ggkStart(
     const char *pAdvertisingName,
     const char *pAdvertisingShortName,
     bool enableMultipleConnections,
+    bool externalAdvertising,
     GGKServerDataGetter getter,
     GGKServerDataSetter setter,
     int maxAsyncInitTimeoutMS
@@ -493,6 +501,7 @@ int ggkStart(
             pAdvertisingName,
             pAdvertisingShortName,
             enableMultipleConnections,
+            externalAdvertising,
             getter,
             setter
         );
